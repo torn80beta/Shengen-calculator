@@ -1,8 +1,8 @@
 import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
-// import { Button } from "@/components/ui/button";
 import { DatePickerForm } from "@/components/ui/DatePickerForm/DatePickerForm";
+import { DatePickerWithRange } from "@/components/ui/DatePickerWithRange/DatePickerWithRange";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,7 +15,8 @@ export default function Home() {
         className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
       >
         <p>Welcome to Shengen calculator!</p>
-        <DatePickerForm />
+        <DatePickerWithRange />
+        {/* <DatePickerForm /> */}
       </main>
       <Toaster />
     </>

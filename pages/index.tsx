@@ -12,11 +12,10 @@ export default function Home() {
   return (
     <>
       <main
-        className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
+        className={`flex flex-col items-center min-h-screen w-full p-4 bg-gradient-to-br from-indigo-500 via-blue-500 to-violet-500 ${inter.className}`}
       >
-        <p>Welcome to Shengen calculator!</p>
+        {/* <p>Welcome to Shengen calculator!</p> */}
         <DatePickerWithRange />
-        {/* <DatePickerForm /> */}
       </main>
       <Toaster />
     </>

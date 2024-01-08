@@ -3,7 +3,6 @@
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -12,7 +11,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
 import { HTMLAttributes, useEffect } from "react";
 import { useState } from "react";
 
@@ -149,13 +147,15 @@ export function DatePickerWithRange({
             numberOfMonths={2}
             fromDate={new Date(startDate)}
             toDate={new Date()}
+            showOutsideDays={true}
+            disabled={dateRange}
           />
         </PopoverContent>
       </Popover>
       <Button onClick={addHandler}>Add</Button>
       <Button
         onClick={() => {
-          setDate(undefined), setDateRange([]);
+          setDate(undefined), setDateRange([]), setDays([]);
         }}
       >
         Clear all

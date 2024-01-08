@@ -76,7 +76,7 @@ export function DatePickerWithRange({
 
     <div
       className={cn(
-        "flex flex-col gap-10 justify-between h-[calc(100vh_-_38px)] w-80",
+        "flex flex-col gap-10 justify-between h-[calc(100vh_-_60px)] w-80",
         className
       )}
     >

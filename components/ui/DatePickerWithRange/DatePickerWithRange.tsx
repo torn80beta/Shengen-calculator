@@ -1,6 +1,5 @@
 "use client";
 
-// import * as React from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
@@ -22,8 +21,29 @@ export function DatePickerWithRange({
 }: HTMLAttributes<HTMLDivElement>) {
   const [date, setDate] = useState<DateRange | undefined>();
   const [dateRange, setDateRange] = useState<DateRange[]>([]);
+  const [days, setDays] = useState<number[]>([]);
+  const [totalDays, setTotalDays] = useState(0);
 
-  useEffect(() => {
+  const currentDate = new Date();
+  const startDate = Number(format(currentDate, "T")) - 15552000000;
+
+  const numberOfDays = Math.ceil(
+    (Number(format(currentDate, "T")) - startDate) / 86400000
+  );
+
+  const difCalc = (start: Date, end: Date) => {
+    return Math.ceil(
+      (Number(format(end, "T")) - Number(format(start, "T"))) / 86400000 + 1
+    );
+  };
+
+  const setDaysHandler = (start: Date | undefined, end: Date | undefined) => {
+    if (start !== undefined && end !== undefined) {
+      setDays((days) => [...days, difCalc(start, end)]);
+    }
+  };
+
+  const addHandler = () => {
     if (
       date?.from !== dateRange[dateRange.length - 1]?.from &&
       date?.from !== undefined
@@ -33,23 +53,42 @@ export function DatePickerWithRange({
         date?.to !== undefined
       ) {
         setDateRange((prevDateRange) => [...prevDateRange, date]);
+        setDaysHandler(date?.from, date?.to);
       }
     }
-    // console.log(date);
-  }, [date, dateRange]);
+  };
+
+  const deleteHandler = (index: number) => {
+    setDateRange((prevDateRange) => [
+      ...prevDateRange.slice(0, index),
+      ...prevDateRange.slice(index + 1),
+    ]);
+    setDays((prevDays) => [
+      ...prevDays.slice(0, index),
+      ...prevDays.slice(index + 1),
+    ]);
+  };
+
+  useEffect(() => {
+    setTotalDays(days?.reduce((a, b) => a + b, 0));
+  }, [days, totalDays]);
 
   return (
-    // console.log(dateRange),
+    // console.log(days),
     <div className={cn("grid gap-2", className)}>
+      <p>Starting date: {format(startDate, "LLL dd, y")}</p>
+      <p>Current date: {format(currentDate, "LLL dd, y")}</p>
+      <p>Number of days: {numberOfDays}</p>
+      <p>Total days selected: {totalDays}</p>
+
       <div className="mb-24">
-        <p className="mb-2">Selected of ranges:</p>
+        <p className="mb-2">Selected ranges:</p>
         <ul className="flex flex-col gap-6">
           {dateRange?.map((date, index) => (
             <li
               key={index}
               className="flex flex-col items-left justify-between"
             >
-              {/* <p>{Number(index) + 1}:</p> */}
               <div className="flex gap-1">
                 <p>From: </p>
                 {date?.from ? format(date?.from, "LLL dd, y") : "Pick a date"}
@@ -59,28 +98,22 @@ export function DatePickerWithRange({
                 {date?.to ? format(date?.to, "LLL dd, y") : "Pick a date"}
               </div>
               <div className="flex flex-row mt-1 mb-3">
-                {/* <p>Milliseconds timestamp:</p>
+                <p className="mr-1">Number of selected days: </p>
                 <div>
-                  From: {date?.from ? format(date?.from, "T") : "Pick a date"}
-                </div>
-                <div>
-                  To: {date?.to ? format(date?.to, "T") : "Pick a date"}
-                </div> */}
-                <p>Number of selected days:</p>
-                <div>
-                  {date?.from && date?.to
-                    ? format(
-                        Number(format(date.to, "T")) -
-                          Number(format(date.from, "T")),
-                        "d"
-                      )
-                    : " "}
+                  {date?.from && date?.to ? difCalc(date.from, date.to) : null}
                 </div>
               </div>
+              <Button
+                variant="destructive"
+                onClick={() => deleteHandler(index)}
+              >
+                Delete
+              </Button>
             </li>
           ))}
         </ul>
       </div>
+
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -114,9 +147,12 @@ export function DatePickerWithRange({
             selected={date}
             onSelect={setDate}
             numberOfMonths={2}
+            fromDate={new Date(startDate)}
+            toDate={new Date()}
           />
         </PopoverContent>
       </Popover>
+      <Button onClick={addHandler}>Add</Button>
       <Button
         onClick={() => {
           setDate(undefined), setDateRange([]);

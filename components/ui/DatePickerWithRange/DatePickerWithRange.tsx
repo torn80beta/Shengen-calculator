@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/popover";
 import { HTMLAttributes, useEffect } from "react";
 import { useState } from "react";
+import { CiTrash } from "react-icons/ci";
 
 export function DatePickerWithRange({
   className,
@@ -72,8 +73,6 @@ export function DatePickerWithRange({
   }, [days, totalDays]);
 
   return (
-    // console.log(days),
-
     <div
       className={cn(
         "flex flex-col gap-4 h-full justify-between w-80",
@@ -82,50 +81,55 @@ export function DatePickerWithRange({
     >
       <div className="flex flex-col gap-2 justify-between">
         <div>
-          <p className="border border-indigo-500 rounded-xl p-2">
-            You can be in EU zone for{" "}
-            <span className="font-bold ">{90 - totalDays}</span> days.
+          <h1 className="text-center text-white mb-4">
+            Welcome to EU traveler assistant!
+          </h1>
+          <p className="border-2 border-indigo-50 rounded-xl p-1 text-white text-center mb-4">
+            You can stay in EU for{" "}
+            <span className="font-bold text-cyan-400">{90 - totalDays}</span>{" "}
+            days.
           </p>
-          <p>Starting date: {format(startDate, "LLL dd, y")}</p>
-          <p>Current date: {format(currentDate, "LLL dd, y")}</p>
-          <p>Number of days: {numberOfDays}</p>
-          <p>Total days selected: {totalDays}</p>
+          <p className="mb-4 text-white">
+            In the last {numberOfDays} days{" "}
+            <span className="text-black">
+              {`(`}starting from the {format(startDate, "LLL dd, y")}
+              {`)`}
+            </span>{" "}
+            you`ve been out of the EU for{" "}
+            <span className="text-cyan-400">{totalDays}</span>{" "}
+            {totalDays === 1 ? "day" : "days"}.
+          </p>
         </div>
-        {/* <div className="">
-          <p className="mb-2">Selected ranges:</p> */}
-        {/* [calc(100vh_-_150px)] */}
-        {/* max-h-[600px] */}
-        <ul className="flex flex-col gap-6 max-h-[calc(100vh_-_300px)] overflow-y-scroll no-scrollbar">
+
+        <ul className="flex flex-col gap-6 max-h-[calc(100vh_-_340px)] overflow-y-scroll no-scrollbar">
           {dateRange?.map((date, index) => (
             <li
               key={index}
-              className="flex flex-col items-left justify-between"
+              className="flex flex-row items-left justify-between"
             >
-              <div className="flex gap-1">
-                <p>From: </p>
-                {date?.from ? format(date?.from, "LLL dd, y") : "Pick a date"} -
-              </div>
-              <div className="flex gap-1">
-                <p>To: </p>
-                {date?.to ? format(date?.to, "LLL dd, y") : "Pick a date"}
-              </div>
-              <div className="flex flex-row mt-1 mb-3">
-                <p className="mr-1">Number of selected days: </p>
-                <div>
-                  {date?.from && date?.to ? difCalc(date.from, date.to) : null}
+              <div>
+                <div className="flex gap-1">
+                  {date?.from ? format(date?.from, "LLL dd, y") : "Pick a date"}{" "}
+                  - {date?.to ? format(date?.to, "LLL dd, y") : "Pick a date"}
+                </div>
+                <div className="flex flex-row mt-1 mb-3">
+                  <p className="mr-1">Number of selected days: </p>
+                  <div>
+                    {date?.from && date?.to
+                      ? difCalc(date.from, date.to)
+                      : null}
+                  </div>
                 </div>
               </div>
               <Button
-                // className="w-12"
-                variant="destructive"
+                className="h-12 w-16 bg-slate-700 hover:bg-rose-500"
                 onClick={() => deleteHandler(index)}
               >
-                Delete
+                <CiTrash size={26} />
               </Button>
             </li>
           ))}
         </ul>
-        {/* </div> */}
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex  gap-2">
@@ -169,13 +173,12 @@ export function DatePickerWithRange({
               />
             </PopoverContent>
           </Popover>
-          <Button onClick={addHandler} className="w-20">
+          <Button onClick={addHandler} className="w-20 bg-slate-700">
             Add
           </Button>
         </div>
 
         <Button
-          // className="max-w-full"
           variant={"destructive"}
           onClick={() => {
             setDate(undefined), setDateRange([]), setDays([]);

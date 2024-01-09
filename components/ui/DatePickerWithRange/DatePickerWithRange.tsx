@@ -76,7 +76,7 @@ export function DatePickerWithRange({
 
     <div
       className={cn(
-        "flex flex-col gap-10 justify-between h-[calc(100vh_-_60px)] w-80",
+        "flex flex-col gap-4 h-full justify-between w-80",
         className
       )}
     >
@@ -91,40 +91,41 @@ export function DatePickerWithRange({
           <p>Number of days: {numberOfDays}</p>
           <p>Total days selected: {totalDays}</p>
         </div>
-        <div className="mb-8">
-          <p className="mb-2">Selected ranges:</p>
-          <ul className="flex flex-col gap-6 max-h-96 overflow-y-scroll no-scrollbar">
-            {dateRange?.map((date, index) => (
-              <li
-                key={index}
-                className="flex flex-col items-left justify-between"
+        {/* <div className="">
+          <p className="mb-2">Selected ranges:</p> */}
+        {/* [calc(100vh_-_150px)] */}
+        {/* max-h-[600px] */}
+        <ul className="flex flex-col gap-6 max-h-[calc(100vh_-_300px)] overflow-y-scroll no-scrollbar">
+          {dateRange?.map((date, index) => (
+            <li
+              key={index}
+              className="flex flex-col items-left justify-between"
+            >
+              <div className="flex gap-1">
+                <p>From: </p>
+                {date?.from ? format(date?.from, "LLL dd, y") : "Pick a date"} -
+              </div>
+              <div className="flex gap-1">
+                <p>To: </p>
+                {date?.to ? format(date?.to, "LLL dd, y") : "Pick a date"}
+              </div>
+              <div className="flex flex-row mt-1 mb-3">
+                <p className="mr-1">Number of selected days: </p>
+                <div>
+                  {date?.from && date?.to ? difCalc(date.from, date.to) : null}
+                </div>
+              </div>
+              <Button
+                // className="w-12"
+                variant="destructive"
+                onClick={() => deleteHandler(index)}
               >
-                <div className="flex gap-1">
-                  <p>From: </p>
-                  {date?.from ? format(date?.from, "LLL dd, y") : "Pick a date"}
-                </div>
-                <div className="flex gap-1">
-                  <p>To: </p>
-                  {date?.to ? format(date?.to, "LLL dd, y") : "Pick a date"}
-                </div>
-                <div className="flex flex-row mt-1 mb-3">
-                  <p className="mr-1">Number of selected days: </p>
-                  <div>
-                    {date?.from && date?.to
-                      ? difCalc(date.from, date.to)
-                      : null}
-                  </div>
-                </div>
-                <Button
-                  variant="destructive"
-                  onClick={() => deleteHandler(index)}
-                >
-                  Delete
-                </Button>
-              </li>
-            ))}
-          </ul>
-        </div>
+                Delete
+              </Button>
+            </li>
+          ))}
+        </ul>
+        {/* </div> */}
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex  gap-2">
@@ -174,6 +175,7 @@ export function DatePickerWithRange({
         </div>
 
         <Button
+          // className="max-w-full"
           variant={"destructive"}
           onClick={() => {
             setDate(undefined), setDateRange([]), setDays([]);

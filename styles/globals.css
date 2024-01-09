@@ -102,3 +102,10 @@
     scrollbar-width: none; /* Firefox */
   }
 }
+
+@layer components {
+  .page-container {
+    @apply flex flex-col items-center justify-between h-dvh;
+    /* min-h-screen h-dvh*/
+  }
+}

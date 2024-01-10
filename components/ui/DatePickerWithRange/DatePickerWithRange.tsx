@@ -14,6 +14,7 @@ import {
 import { HTMLAttributes, useEffect } from "react";
 import { useState } from "react";
 import { CiTrash } from "react-icons/ci";
+import Image from "next/image";
 
 export function DatePickerWithRange({
   className,
@@ -75,18 +76,25 @@ export function DatePickerWithRange({
   return (
     <div
       className={cn(
-        "flex flex-col gap-4 h-full justify-between w-80",
+        "flex flex-col gap-4 h-full justify-between w-[360px] px-2 text-sm",
         className
       )}
     >
       <div className="flex flex-col gap-2 justify-between">
         <div>
-          <h1 className="text-center text-white mb-4">
-            Welcome to EU traveler assistant!
+          <h1 className="flex flex-row items-center justify-center text-white mb-4">
+            Welcome to EU{" "}
+            <span>
+              <Image src={"/tourism.png"} alt="image" width={30} height={30} />
+            </span>{" "}
+            traveler assistant!
           </h1>
+
           <p className="border-2 border-indigo-50 rounded-xl p-1 text-white text-center mb-4">
             You can stay in EU for{" "}
-            <span className="font-bold text-cyan-400">{90 - totalDays}</span>{" "}
+            <span className="font-bold text-cyan-400">
+              {totalDays > 90 ? 0 : 90 - totalDays}
+            </span>{" "}
             days.
           </p>
           <p className="mb-4 text-white">
@@ -101,11 +109,12 @@ export function DatePickerWithRange({
           </p>
         </div>
 
-        <ul className="flex flex-col gap-6 max-h-[calc(100vh_-_340px)] overflow-y-scroll no-scrollbar">
+        <ul className="flex flex-col gap-6 max-h-[calc(100dvh_-_340px)] overflow-y-scroll no-scrollbar">
           {dateRange?.map((date, index) => (
             <li
               key={index}
-              className="flex flex-row items-left justify-between"
+              // -translate-x-full transition duration-500 ease-in-out  animate-in slide-in-from-left zoom-in duration-250
+              className="flex flex-row items-left justify-between animate-slide"
             >
               <div>
                 <div className="flex gap-1">
@@ -139,7 +148,7 @@ export function DatePickerWithRange({
                 id="date"
                 variant={"outline"}
                 className={cn(
-                  "w-[300px] justify-start text-left font-normal",
+                  "w-[280px] justify-start text-left font-normal text-xs ",
                   !date && "text-muted-foreground"
                 )}
               >
@@ -165,7 +174,7 @@ export function DatePickerWithRange({
                 defaultMonth={date?.from}
                 selected={date}
                 onSelect={setDate}
-                numberOfMonths={2}
+                numberOfMonths={1}
                 fromDate={new Date(startDate)}
                 toDate={new Date()}
                 showOutsideDays={true}
@@ -173,7 +182,7 @@ export function DatePickerWithRange({
               />
             </PopoverContent>
           </Popover>
-          <Button onClick={addHandler} className="w-20 bg-slate-700">
+          <Button onClick={addHandler} className="w-14 bg-slate-700">
             Add
           </Button>
         </div>

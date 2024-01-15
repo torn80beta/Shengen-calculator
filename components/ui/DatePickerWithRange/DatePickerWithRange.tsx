@@ -25,10 +25,10 @@ export function DatePickerWithRange({
   const [totalDays, setTotalDays] = useState(0);
 
   const currentDate = new Date();
-  const startDate = Number(format(currentDate, "T")) - 15552000000 - 86400000;
+  const startDate = Number(format(currentDate, "T")) - 15552000000 + 86400000;
 
   const numberOfDays = Math.ceil(
-    (Number(format(currentDate, "T")) - startDate) / 86400000
+    (Number(format(currentDate, "T")) - startDate) / 86400000 + 1
   );
 
   const difCalc = (start: Date, end: Date) => {

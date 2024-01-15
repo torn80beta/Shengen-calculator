@@ -11,17 +11,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { HTMLAttributes, useEffect } from "react";
+import { HTMLAttributes, useCallback, useEffect } from "react";
 import { useState } from "react";
 import { CiTrash } from "react-icons/ci";
 import Image from "next/image";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
-export function DatePickerWithRange({
-  className,
-}: HTMLAttributes<HTMLDivElement>) {
+const DatePickerWithRange = ({ className }: HTMLAttributes<HTMLDivElement>) => {
+  const [localDates, setLocalDates] = useLocalStorage("dates", []);
+  const [localDays, setLocalDays] = useLocalStorage("days", []);
   const [date, setDate] = useState<DateRange | undefined>();
-  const [dateRange, setDateRange] = useState<DateRange[]>([]);
-  const [days, setDays] = useState<number[]>([]);
+  const [dateRange, setDateRange] = useState<DateRange[]>(localDates);
+  const [days, setDays] = useState<number[]>(localDays);
   const [totalDays, setTotalDays] = useState(0);
 
   const currentDate = new Date();
@@ -37,13 +38,16 @@ export function DatePickerWithRange({
     );
   };
 
-  const setDaysHandler = (start: Date | undefined, end: Date | undefined) => {
-    if (start !== undefined && end !== undefined) {
-      setDays((days) => [...days, difCalc(start, end)]);
-    }
-  };
+  const setDaysHandler = useCallback(
+    (start: Date | undefined, end: Date | undefined) => {
+      if (start !== undefined && end !== undefined) {
+        setDays((days) => [...days, difCalc(start, end)]);
+      }
+    },
+    []
+  );
 
-  const addHandler = () => {
+  const addHandler = useCallback(() => {
     if (
       date?.from !== dateRange[dateRange.length - 1]?.from &&
       date?.from !== undefined
@@ -57,7 +61,7 @@ export function DatePickerWithRange({
         setDate(undefined);
       }
     }
-  };
+  }, [date, dateRange, setDaysHandler]);
 
   const deleteHandler = (index: number) => {
     setDateRange((prevDateRange) => [
@@ -73,6 +77,14 @@ export function DatePickerWithRange({
   useEffect(() => {
     setTotalDays(days?.reduce((a, b) => a + b, 0));
   }, [days, totalDays]);
+
+  useEffect(() => {
+    localStorage.setItem("dates", JSON.stringify(dateRange));
+  }, [dateRange]);
+
+  useEffect(() => {
+    localStorage.setItem("days", JSON.stringify(days));
+  }, [days]);
 
   return (
     <div
@@ -199,4 +211,6 @@ export function DatePickerWithRange({
       </div>
     </div>
   );
-}
+};
+
+export default DatePickerWithRange;

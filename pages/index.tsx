@@ -1,6 +1,14 @@
 import { Inter } from "next/font/google";
-import { DatePickerWithRange } from "@/components/ui/DatePickerWithRange/DatePickerWithRange";
 import Head from "next/head";
+import dynamic from "next/dynamic";
+
+/* disable prerendering of dynamic components to prevent hydration mismatches */
+const DatePickerWithRange = dynamic(
+  () => import("../components/ui/DatePickerWithRange/DatePickerWithRange"),
+  {
+    ssr: false,
+  }
+);
 
 const inter = Inter({ subsets: ["latin"] });
 

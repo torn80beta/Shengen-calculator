@@ -25,7 +25,7 @@ export function DatePickerWithRange({
   const [totalDays, setTotalDays] = useState(0);
 
   const currentDate = new Date();
-  const startDate = Number(format(currentDate, "T")) - 15552000000;
+  const startDate = Number(format(currentDate, "T")) - 15552000000 - 86400000;
 
   const numberOfDays = Math.ceil(
     (Number(format(currentDate, "T")) - startDate) / 86400000
@@ -103,7 +103,7 @@ export function DatePickerWithRange({
               {`(`}starting from the {format(startDate, "LLL dd, y")}
               {`)`}
             </span>{" "}
-            you`ve been out of the EU for{" "}
+            you have been in the EU for{" "}
             <span className="text-cyan-400">{totalDays}</span>{" "}
             {totalDays === 1 ? "day" : "days"}.
           </p>

@@ -54,6 +54,7 @@ export function DatePickerWithRange({
       ) {
         setDateRange((prevDateRange) => [...prevDateRange, date]);
         setDaysHandler(date?.from, date?.to);
+        setDate(undefined);
       }
     }
   };
@@ -95,7 +96,7 @@ export function DatePickerWithRange({
             <span className="font-bold text-cyan-400">
               {totalDays > 90 ? 0 : 90 - totalDays}
             </span>{" "}
-            days.
+            {(totalDays > 90 ? 0 : 90 - totalDays) === 1 ? "day." : "days."}
           </p>
           <p className="mb-4 text-white">
             In the last {numberOfDays} days{" "}

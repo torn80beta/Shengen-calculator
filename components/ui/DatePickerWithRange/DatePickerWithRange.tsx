@@ -122,29 +122,46 @@ const DatePickerWithRange = ({ className }: HTMLAttributes<HTMLDivElement>) => {
           </p>
         </div>
 
-        <ul className="flex flex-col gap-6 max-h-[calc(100dvh_-_340px)] overflow-y-scroll no-scrollbar">
+        <ul className="flex flex-col gap-4 max-h-[calc(100dvh_-_340px)] overflow-y-scroll no-scrollbar">
           {dateRange?.map((date, index) => (
             <li
               key={index}
               // -translate-x-full transition duration-500 ease-in-out  animate-in slide-in-from-left zoom-in duration-250
-              className="flex flex-row items-left justify-between animate-slide"
+              className="flex flex-row items-left justify-between items-center animate-slide"
             >
-              <div>
-                <div className="flex gap-1">
+              <div className="py-[2px]">
+                <div
+                  className={`flex gap-1 ${
+                    (date?.from &&
+                      Number(format(date?.from, "T")) < startDate) ||
+                    (date?.to && Number(format(date?.to, "T")) < startDate)
+                      ? "text-rose-800"
+                      : ""
+                  }`}
+                >
                   {date?.from ? format(date?.from, "LLL dd, y") : "Pick a date"}{" "}
                   - {date?.to ? format(date?.to, "LLL dd, y") : "Pick a date"}
                 </div>
-                <div className="flex flex-row mt-1 mb-3">
-                  <p className="mr-1">Number of selected days: </p>
-                  <div>
-                    {date?.from && date?.to
-                      ? difCalc(date.from, date.to)
-                      : null}
+
+                {(date?.from && Number(format(date?.from, "T")) < startDate) ||
+                (date?.to && Number(format(date?.to, "T")) < startDate) ? (
+                  <div className="flex flex-col">
+                    <p className="text-rose-800">Out of the 180 days range.</p>
+                    <p className="text-rose-800">Please correct!</p>
                   </div>
-                </div>
+                ) : (
+                  <div className="flex flex-row gap-1">
+                    <p className="">Number of selected days:</p>
+                    <p>
+                      {date?.from && date?.to
+                        ? difCalc(date.from, date.to)
+                        : null}
+                    </p>
+                  </div>
+                )}
               </div>
               <Button
-                className="h-12 w-16 bg-slate-700 hover:bg-rose-500"
+                className="h-11 w-16 bg-slate-700 hover:bg-rose-500"
                 onClick={() => deleteHandler(index)}
               >
                 <CiTrash size={26} />

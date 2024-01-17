@@ -133,8 +133,9 @@ const DatePickerWithRange = ({ className }: HTMLAttributes<HTMLDivElement>) => {
                 <div
                   className={`flex gap-1 ${
                     (date?.from &&
-                      Number(format(date?.from, "T")) < startDate) ||
-                    (date?.to && Number(format(date?.to, "T")) < startDate)
+                      Number(format(date?.from, "T")) < startDate - 86400000) ||
+                    (date?.to &&
+                      Number(format(date?.to, "T")) < startDate - 86400000)
                       ? "text-rose-800"
                       : ""
                   }`}
@@ -143,8 +144,10 @@ const DatePickerWithRange = ({ className }: HTMLAttributes<HTMLDivElement>) => {
                   - {date?.to ? format(date?.to, "LLL dd, y") : "Pick a date"}
                 </div>
 
-                {(date?.from && Number(format(date?.from, "T")) < startDate) ||
-                (date?.to && Number(format(date?.to, "T")) < startDate) ? (
+                {(date?.from &&
+                  Number(format(date?.from, "T")) < startDate - 86400000) ||
+                (date?.to &&
+                  Number(format(date?.to, "T")) < startDate - 86400000) ? (
                   <div className="flex flex-col">
                     <p className="text-rose-800">Out of the 180 days range.</p>
                     <p className="text-rose-800">Please correct!</p>
